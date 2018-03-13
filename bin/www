@@ -1,0 +1,175 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('untitled:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '5000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+var io = require('socket.io')(server);
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port,function(){
+    console.log('listening on *:5000');
+});
+server.on('error', onError);
+server.on('listening', onListening);
+
+var onlineUsers = {};
+var sentMessages = [];
+
+io.on('connection', function(socket){
+    console.log('Socket connected with ID of ' + socket.id);
+    socket.on('user logged in', function(username) {
+        console.log('%s has joined the chat!', username);
+
+        onlineUsers[socket.id] = username;
+
+        io.emit('user joined', {
+            socketId: socket.id,
+            username: username,
+            timestamp: new Date,
+            type: 'alert',
+            message: username + ' has joined the chat!'
+        });
+    });
+
+    /**
+     * This will get fired whenever a user submits a message to the chat. The
+     * server will create a message object to store all of the various
+     * metadata and store it in $sentMessages. It will then emit a
+     * message to the client to tell it to output the message
+     * in the chat to all users.
+     */
+    socket.on('send message', function(message) {
+        var senderUsername = onlineUsers[socket.id];
+
+        var messageObject = {
+            socketId: socket.id,
+            username: senderUsername,
+            timestamp: new Date,
+            type: 'message',
+            message: message
+        };
+
+        console.log('%s: %s', senderUsername, message);
+
+        sentMessages.push(messageObject);
+
+        io.emit('message received', messageObject);
+    });
+
+    /**
+     * Listens for when an admin clicks the "kick" link on the online users list.
+     * The server will try to find the socket associated with the given username
+     * and disconnect it if it exists.
+     */
+    socket.on('kick user', function(username) {
+        var socketId = Object.keys(onlineUsers).filter(function(key) {
+            return onlineUsers[key] == username;
+        })[0];
+
+        if (io.sockets.sockets[socketId]) {
+            io.sockets.sockets[socketId].disconnect();
+        }
+
+        console.log('%s has been kicked from the chat.', username);
+    });
+
+    /**
+     * Gets fired when a user leaves the page. It will remove their session
+     * from $onlineUsers and broadcast a message to the client to alert
+     * everyone in the chat that the user has disconnected.
+     */
+    socket.on('disconnect', function() {
+        var username = onlineUsers[socket.id];
+
+        delete onlineUsers[socket.id];
+
+        console.log('%s has disconnected from the chat.', username);
+
+        io.emit('user left', {
+            socketId: socket.id,
+            username: username,
+            timestamp: new Date,
+            type: 'alert',
+            message: username + ' has disconnected from the chat!'
+        });
+    });
+});
+
+    /**
+     * Normalize a port into a number, string, or false.
+     */
+
+    function normalizePort(val) {
+        var port = parseInt(val, 10);
+
+        if (isNaN(port)) {
+            // named pipe
+            return val;
+        }
+
+        if (port >= 0) {
+            // port number
+            return port;
+        }
+
+        return false;
+    }
+
+    /**
+     * Event listener for HTTP server "error" event.
+     */
+
+    function onError(error) {
+        if (error.syscall !== 'listen') {
+            throw error;
+        }
+
+        var bind = typeof port === 'string'
+            ? 'Pipe ' + port
+            : 'Port ' + port;
+
+        // handle specific listen errors with friendly messages
+        switch (error.code) {
+            case 'EACCES':
+                console.error(bind + ' requires elevated privileges');
+                process.exit(1);
+                break;
+            case 'EADDRINUSE':
+                console.error(bind + ' is already in use');
+                process.exit(1);
+                break;
+            default:
+                throw error;
+        }
+    }
+
+    /**
+     * Event listener for HTTP server "listening" event.
+     */
+
+    function onListening() {
+        var addr = server.address();
+        var bind = typeof addr === 'string'
+            ? 'pipe ' + addr
+            : 'port ' + addr.port;
+        debug('Listening on ' + bind);
+    }
