@@ -48,4 +48,14 @@ exports.list_all_courses = function(req,res){
     })
 };
 
+exports.find_course_name_like = function(req,res){
+    Course.find({
+        courseName: { $regex: '.*' + req.body['courseName'] + '.*', $options: "i"}
+    }, function(err,course){
+        if (err)
+            res.send(err)
+        res.json(course);
+    })
+}
+
 
