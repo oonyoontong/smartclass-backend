@@ -55,19 +55,27 @@ exports.update_a_account = function(req, res) {
     });
 };
 
-//Remove accounts from courses
+//TODO remove references
 exports.delete_account = function(req, res) {
-
     Account.remove({
         _id: req.body['accountId']
     }, function(err, account) {
         if (err)
             res.send(err);
-        res.json({ message: 'Account successfully deleted' });
+        res.send("DONE");
+      /*  Course.deleteMany(
+            {
+                "enrolled": req.body['accountId']
+            }, function(err,course){
+                if (err)
+                    res.send(err);
+                    if (account){
+                        res.json(account);
+                    }
+            })*/
     });
 };
 
-//TODO add account to course
 exports.add_course = function(req,res){
     Course.findOneAndUpdate(
         {courseId: req.body['courseId']},
@@ -75,35 +83,43 @@ exports.add_course = function(req,res){
     ).exec(function(err,result){
         if (err)
             res.send(err);
-        console.log(result);
-    });
-
-    Account.findByIdAndUpdate(
-        req.body['accountId'],
-        { $addToSet: {enrolled: req.body['courseId']}},
-        {new:true}
-    ).exec(function(err, account) {
+        try {
+        Account.findByIdAndUpdate(
+            req.body['accountId'],
+            { $addToSet: {enrolled: result["_id"]}},
+            {new:true}
+        ).exec(function(err, account) {
             if (err)
                 res.send(err);
             res.json(account);
         });
+        } catch (err) {
+            res.send(err);
+        }
+    });
 };
 
 exports.delete_course = function(req,res){
-    Course.findByIdAndUpdate(
-        req.body['courseId'],
+    Course.findOneAndUpdate(
+        {courseId: req.body['courseId']},
         { $pull: {enrolled: req.body['accountId']}}
-    );
-
-    Account.findByIdAndUpdate(
-        req.body['accountId'],
-        { $pull: {enrolled: req.body['courseId']}},
-        {new:true}
-    ).exec(function(err, account) {
-            if (err)
-                res.send(err);
-            res.json(account);
-        });
+    ).exec(function(err,result){
+        if (err)
+            res.send(err);
+        try {
+            Account.findByIdAndUpdate(
+                req.body['accountId'],
+                { $pull: {enrolled: result["_id"]}},
+                {new:true}
+            ).exec(function(err, account) {
+                if (err)
+                    res.send(err);
+                res.json(account);
+            });
+        } catch (err) {
+            res.send(err);
+        }
+    });
 };
 
 

@@ -13,22 +13,28 @@ exports.create_new_course = function(req,res){
     });
 };
 
+//TODO remove all references/children
 exports.delete_course = function(req, res) {
-    accounts = Course.findById(req.body["courseId"]).select("enrolled");
-    accounts.exec(function(err,q){
-        console.log(q);
+    Course.findOne({courseId: req.body["courseId"]}).select('enrolled _id').exec(function(err,course){
+        if (err)
+            res.send(err);
+        console.log(course['enrolled']);
+        console.log(course['_id']);
+        Account.update({_id: {$in: course['enrolled']}},{$pull:{enrolled: course["_id"]}},{multi:true}, function(err,account){
+            if (err)
+                res.send(err)
+        })
+
+        /*Course.remove({
+            courseId: req.body['courseId']
+        }, function(err, course) {
+            if (err)
+                res.send(err);
+            res.json({ message: 'Course successfully deleted' });
+        });*/
     })
 
 
-
-
-    Course.remove({
-        courseId: req.body['courseId']
-    }, function(err, course) {
-        if (err)
-            res.send(err);
-        res.json({ message: 'Course successfully deleted' });
-    });
 };
 
 
