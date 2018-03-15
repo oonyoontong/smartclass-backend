@@ -96,11 +96,10 @@ exports.delete_course = function(req,res){
     Course.findByIdAndUpdate(
         req.body['courseId'],
         { $pull: {enrolled: req.body['accountId']}},
-        {safe: true, upsert: true,new:true},function(err,course){
-            if (err)
-                res.send(err);
-        }
-    );
+        {safe: true, upsert: true,new:true}).exec(function(err,course){
+        if (err)
+            res.send(err);
+    });
 
     Account.findByIdAndUpdate(
         req.body['accountId'],
@@ -113,6 +112,8 @@ exports.delete_course = function(req,res){
             res.json(account);
         });
 };
+
+
 
 
 

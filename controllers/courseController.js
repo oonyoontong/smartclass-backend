@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var Course = require('../models/courseSchema');
-
+var Account = require('../models/accountSchema');
 
 exports.create_new_course = function(req,res){
     req.body["Date"] = Date.now();
@@ -14,6 +14,15 @@ exports.create_new_course = function(req,res){
 };
 
 exports.delete_course = function(req, res) {
+    Account.findByIdAndUpdate(
+        req.body['accountId'],
+        { $pull: {enrolled: req.body['accountId']}},
+        {safe: true, upsert: true,new:true}).exec(function(err,account){
+        if (err)
+            res.send(err);
+    });
+
+
     Course.remove({
         courseId: req.body['courseId']
     }, function(err, course) {
