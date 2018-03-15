@@ -1,14 +1,12 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
+
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 require("./models/accountSchema");
-var auth = require('./routes/auth');
-var users = require('./routes/users');
-var index = require('./routes/index');
+
 var app = express();
 var session = require('express-session');
 var passport = require('passport');
@@ -51,10 +49,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+var account = require('./routes/account');
 
-app.use('/', index);
-app.use('/account',auth);
-app.use('/users', users);
+
+app.use('/account',account);
+
 
 //Connecting to MongoDB
 var mongoDB =  'mongodb://username:password@ds012578.mlab.com:12578/smartclass-db';
@@ -82,7 +81,10 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+    res.status(500).json({
+        message: err.message,
+        error: err
+    });
 });
 
 module.exports = app;

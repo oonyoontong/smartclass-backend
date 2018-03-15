@@ -3,13 +3,13 @@ var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
-var User = mongoose.model('Account');
-var Account = require('../controllers/accountController');
+var Account = mongoose.model('Account');
+var AccountController = require('../controllers/accountController');
 var sha256 = require('sha256');
 
 passport.use(new LocalStrategy(
     function(username, password, done) {
-        User.findOne({ username: username }, function(err, user) {
+        Account.findOne({ username: username }, function(err, user) {
             if (err) { return done(err); }
             if (!user) {
                 return done(null, false, { message: 'Incorrect username.' });
@@ -31,15 +31,11 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
+    Account.findById(id, function(err, user) {
         done(err, user);
     });
 });
 
-/*router.post('/login',
-    passport.authenticate('local', { successRedirect: '/',
-        failureRedirect: '/login'})
-);*/
 
 router.post('/login', function(req, res, next) {
     passport.authenticate('local', function(err, user, info) {
@@ -58,9 +54,9 @@ router.post('/login', function(req, res, next) {
 });
 
 
-router.post('/signup',Account.create_new_account);
+router.post('/signup',AccountController.create_new_account);
 
-router.get('/',Account.list_all_accounts);
+router.get('/',AccountController.list_all_accounts);
 
 
 router.get('/logout', function(req, res){
