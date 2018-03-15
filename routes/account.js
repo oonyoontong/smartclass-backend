@@ -58,6 +58,7 @@ router.post('/signup',AccountController.create_new_account);
 
 router.get('/',AccountController.list_all_accounts);
 
+router.post('/update',AccountController.update_a_account);
 
 router.get('/logout', function(req, res){
     req.logout();

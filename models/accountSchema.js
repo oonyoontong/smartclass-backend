@@ -8,7 +8,8 @@ var AccountSchema = new Schema({
     passwordSalt: String,
     passwordHash: String,
     email: String,
-    privilege: Number,
+    //0 for admin, 1 for instructor, 2 for admin
+    privilege: {type: Number, required: true},
     class: String,
     coursesEnrolled: [{
         type: Schema.Types.ObjectId,

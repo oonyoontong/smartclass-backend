@@ -21,7 +21,7 @@ exports.create_new_account = function(req,res){
 };
 
 exports.read_a_account = function(req, res) {
-    Account.findById(req.params.accountId, function(err, account) {
+    Account.findById(req.body['accountId'], function(err, account) {
         if (err)
             res.send(err);
         res.json(account);
@@ -30,7 +30,9 @@ exports.read_a_account = function(req, res) {
 
 
 exports.update_a_account = function(req, res) {
-    Account.findOneAndUpdate({_id: req.params.accountId}, req.body, {new: true}, function(err, account) {
+    console.log(req.body);
+
+    Account.findOneAndUpdate({_id: req.body['accountId']}, req.body, {new: true}, function(err, account) {
         if (err)
             res.send(err);
         res.json(account);
