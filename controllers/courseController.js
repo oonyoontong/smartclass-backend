@@ -14,13 +14,12 @@ exports.create_new_course = function(req,res){
 };
 
 exports.delete_course = function(req, res) {
-    Account.findByIdAndUpdate(
-        req.body['accountId'],
-        { $pull: {enrolled: req.body['accountId']}},
-        {safe: true, upsert: true,new:true}).exec(function(err,account){
-        if (err)
-            res.send(err);
-    });
+    accounts = Course.findById(req.body["courseId"]).select("enrolled");
+    accounts.exec(function(err,q){
+        console.log(q);
+    })
+
+
 
 
     Course.remove({
@@ -37,6 +36,7 @@ exports.update_a_course = function(req, res) {
     Course.findOneAndUpdate({courseId: req.body['courseId']}, req.body, {new: true}, function(err, course) {
         if (err)
             res.send(err);
+        console.log(course);
         res.json(course);
     });
 };

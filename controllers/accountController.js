@@ -48,8 +48,6 @@ exports.read_a_account = function(req, res) {
 };
 
 exports.update_a_account = function(req, res) {
-    console.log(req.body);
-
     Account.findOneAndUpdate({_id: req.body['accountId']}, req.body, {new: true}, function(err, account) {
         if (err)
             res.send(err);
@@ -71,21 +69,20 @@ exports.delete_account = function(req, res) {
 
 //TODO add account to course
 exports.add_course = function(req,res){
-    Course.findByIdAndUpdate(
-        req.body['courseId'],
-        { $addToSet: {enrolled: req.body['accountId']}},
-        {safe: true, upsert: true,new:true},function(err,course){
-            if (err)
-                res.send(err);
-        }
-    );
+    Course.findOneAndUpdate(
+        {courseId: req.body['courseId']},
+        { $addToSet: {enrolled: req.body['accountId']}}
+    ).exec(function(err,result){
+        if (err)
+            res.send(err);
+        console.log(result);
+    });
 
     Account.findByIdAndUpdate(
         req.body['accountId'],
         { $addToSet: {enrolled: req.body['courseId']}},
-        {safe: true, upsert: true,new:true}
-    ).populate('enrolled')
-        .exec(function(err, account) {
+        {new:true}
+    ).exec(function(err, account) {
             if (err)
                 res.send(err);
             res.json(account);
@@ -95,25 +92,19 @@ exports.add_course = function(req,res){
 exports.delete_course = function(req,res){
     Course.findByIdAndUpdate(
         req.body['courseId'],
-        { $pull: {enrolled: req.body['accountId']}},
-        {safe: true, upsert: true,new:true}).exec(function(err,course){
-        if (err)
-            res.send(err);
-    });
+        { $pull: {enrolled: req.body['accountId']}}
+    );
 
     Account.findByIdAndUpdate(
         req.body['accountId'],
         { $pull: {enrolled: req.body['courseId']}},
-        {safe: true, upsert: true, new:true}
-    ).populate('enrolled')
-        .exec(function(err, account) {
+        {new:true}
+    ).exec(function(err, account) {
             if (err)
                 res.send(err);
             res.json(account);
         });
 };
-
-
 
 
 
