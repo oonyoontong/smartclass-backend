@@ -57,8 +57,9 @@ exports.update_a_account = function(req, res) {
     });
 };
 
-
+//Remove accounts from courses
 exports.delete_account = function(req, res) {
+
     Account.remove({
         _id: req.body['accountId']
     }, function(err, account) {
