@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
-var Account = require('../models/accountSchema.js')
+var Account = require('../models/accountSchema');
+var Course  = require('../models/courseSchema');
 var sha256 = require('sha256');
 var passport = require('../passport/passport');
 
@@ -67,7 +68,54 @@ exports.delete_account = function(req, res) {
     });
 };
 
+//TODO add account to course
+exports.add_course = function(req,res){
+    Course.findByIdAndUpdate(
+        req.body['courseId'],
+        { $addToSet: {enrolled: req.body['accountId']}},
+        {safe: true, upsert: true,new:true},function(err,course){
+            if (err)
+                res.send(err);
+        }
+    );
 
+    Account.findByIdAndUpdate(
+        req.body['accountId'],
+        { $addToSet: {enrolled: req.body['courseId']}},
+        {safe: true, upsert: true,new:true}
+    ).populate('enrolled')
+        .exec(function(err, account) {
+            if (err)
+                res.send(err);
+            res.json(account);
+        });
+};
+
+exports.delete_course = function(req,res){
+    Course.findByIdAndUpdate(
+        req.body['courseId'],
+        { $pull: {enrolled: req.body['accountId']}},
+        {safe: true, upsert: true,new:true},function(err,course){
+            if (err)
+                res.send(err);
+        }
+    );
+
+    Account.findByIdAndUpdate(
+        req.body['accountId'],
+        { $pull: {enrolled: req.body['courseId']}},
+        {safe: true, upsert: true, new:true}
+    ).populate('enrolled')
+        .exec(function(err, account) {
+            if (err)
+                res.send(err);
+            res.json(account);
+        });
+};
+
+
+
+/*
 exports.add_course = function(req,res){
     Account.findByIdAndUpdate(
         req.body['accountId'],
@@ -79,4 +127,4 @@ exports.add_course = function(req,res){
             res.json(account);
         }
     );
-}
+};*/

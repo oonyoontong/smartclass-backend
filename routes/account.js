@@ -1,17 +1,18 @@
 var express = require('express');
 var router = express.Router();
-var AccountController = require('../controllers/accountController');
+var accountController = require('../controllers/accountController');
 
 
-router.post('/login', AccountController.authenticate);
+router.post('/login', accountController.authenticate);
 
-router.post('/create',AccountController.create_new_account);
+router.post('/create',accountController.create_new_account);
 
-router.get('/',AccountController.read_a_account);
+router.get('/',accountController.read_a_account);
 
-router.post('/update',AccountController.update_a_account);
+router.post('/update',accountController.update_a_account);
 
-router.post('/add_course',AccountController.add_course);
+router.post('/add_course',accountController.add_course);
+router.post('/delete_course',accountController.delete_course);
 
 router.get('/logout', function(req, res){
     req.logout();

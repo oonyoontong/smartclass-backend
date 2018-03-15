@@ -7,9 +7,18 @@ var CourseSchema = new Schema({
     dateCreated: Date,
     courseName: {type: String, required: true},
     description: String,
-    lectures: [Schema.Types.ObjectId],
-    enrolled: [Schema.Types.ObjectId],
-    instructors: [Schema.Types.ObjectId]
+    lectures: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Lecture'
+    }],
+    enrolled: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Account'
+    }],
+    instructors: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Account'
+    }]
 	});
 
 
