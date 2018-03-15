@@ -3,7 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
-var Account = mongoose.model('Account');
+var Account = require('../models/accountSchema');
 var AccountController = require('../controllers/accountController');
 var sha256 = require('sha256');
 

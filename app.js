@@ -5,12 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-require("./models/accountSchema");
 
 var app = express();
 var session = require('express-session');
 var passport = require('passport');
-var http = require('http').Server(express);
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -61,8 +60,6 @@ mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console,'MongoDB connection error'));
-
-
 
 
 
