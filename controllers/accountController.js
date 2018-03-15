@@ -1,6 +1,24 @@
 var mongoose = require("mongoose");
-var Account = mongoose.model("Account");
+var Account = require('../models/accountSchema.js')
 var sha256 = require('sha256');
+var passport = require('../passport/passport');
+
+
+exports.authenticate = function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+        if (err) { return next(err); }
+        if (!user) { return res.json({
+            authenticated: false
+        }); }
+        req.logIn(user, function(err) {
+            if (err) { return next(err); }
+            return res.json({
+                authenticated: true,
+                account: user
+            });
+        });
+    })(req, res, next);
+}
 
 exports.list_all_accounts = function(req,res){
     Account.find({},function(err,account){
@@ -28,7 +46,6 @@ exports.read_a_account = function(req, res) {
     });
 };
 
-
 exports.update_a_account = function(req, res) {
     console.log(req.body);
 
@@ -49,3 +66,17 @@ exports.delete_account = function(req, res) {
         res.json({ message: 'Account successfully deleted' });
     });
 };
+
+
+exports.add_course = function(req,res){
+    Account.findByIdAndUpdate(
+        req.body['accountId'],
+        {$push: {enrolled: req.body['courseId']}},
+        {safe: true, upsert: true},
+        function(err, account) {
+            if (err)
+                res.send(err);
+            res.json(account);
+        }
+    );
+}
