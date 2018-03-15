@@ -49,9 +49,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 var account = require('./routes/account');
+var course = require('./routes/course');
 
 
 app.use('/account',account);
+app.use('/course',course);
 
 
 //Connecting to MongoDB
@@ -77,11 +79,10 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-    res.status(500).json({
-        message: err.message,
-        error: err
-    });
+  /*res.status(err.status).json({
+      message: err.message,
+      error: err
+  });*/
 });
 
 module.exports = app;

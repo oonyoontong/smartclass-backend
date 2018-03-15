@@ -54,9 +54,9 @@ router.post('/login', function(req, res, next) {
 });
 
 
-router.post('/signup',AccountController.create_new_account);
+router.post('/create',AccountController.create_new_account);
 
-router.get('/',AccountController.list_all_accounts);
+router.get('/',AccountController.read_a_account);
 
 router.post('/update',AccountController.update_a_account);
 

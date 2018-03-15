@@ -40,10 +40,9 @@ exports.update_a_account = function(req, res) {
 };
 
 
-exports.delete_a_account = function(req, res) {
-
+exports.delete_account = function(req, res) {
     Account.remove({
-        _id: req.params.accountId
+        _id: req.body['accountId']
     }, function(err, account) {
         if (err)
             res.send(err);

@@ -3,9 +3,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var CourseSchema = new Schema({
-    courseID: String,
+    courseID: {type: String, unique: true,index: true, required: true},
     dateCreated: Date,
-    courseName: String,
+    courseName: {type: String, required: true},
     description: String,
     lectures: [Schema.Types.ObjectId],
     enrolled: [Schema.Types.ObjectId],
