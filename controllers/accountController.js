@@ -56,14 +56,23 @@ exports.update_a_account = function(req, res) {
 };
 
 //TODO remove references
+//remove courses references
 exports.remove_account = function(req,res){
-  Account.remove(
-      {_id: req.body['accountId']},
-      function(err){
+  Account.findById(
+      req.body['accountId'],
+      function(err,account){
           if (err)
               res.send(err);
-          res.send("account deleted");
-      })
+          console.log(account);
+          if(account == null){
+              console.log("account is null");
+          } else {
+              account.remove();
+          }
+
+          res.send(account);
+      }
+  )
 };
 
 exports.add_course_to_account = function(req,res){

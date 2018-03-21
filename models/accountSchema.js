@@ -20,8 +20,8 @@ var AccountSchema = new Schema({
 	});
 
 AccountSchema.pre("remove",function(){
-    console.log(this);
-   course.update(
+   console.log(this);
+   this.model("Course").update(
        {_id: {$in : this.enrolled}},
        {$pull : {enrolled: this._id}},
        {multi: true},

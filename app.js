@@ -1,6 +1,10 @@
 var express = require('express');
 var path = require('path');
 
+var account = require('./routes/account');
+var course = require('./routes/course');
+
+
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -48,8 +52,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-var account = require('./routes/account');
-var course = require('./routes/course');
 
 
 app.use('/account',account);

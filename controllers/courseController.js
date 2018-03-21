@@ -15,13 +15,20 @@ exports.create_new_course = function(req,res){
 
 //TODO remove all references/children
 exports.remove_course = function(req, res) {
-        Course.remove({
-            courseId: req.body['courseId']
-        }, function(err, course) {
+    Course.findOne(
+        {courseId: req.body['courseId']},
+        function(err, course) {
             if (err)
                 res.send(err);
-            res.json({ message: 'Course successfully deleted' });
-        });
+
+            if(course == null){
+                console.log("course is null");
+            } else {
+                course.remove();
+            res.send(course);
+            }
+        }
+    )
 };
 
 
