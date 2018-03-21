@@ -56,7 +56,7 @@ exports.update_a_account = function(req, res) {
 };
 
 //TODO remove references
-exports.delete_account = function(req, res) {
+exports.remove_account = function(req, res) {
     Account.remove({
         _id: req.body['accountId']
     }, function(err, account) {
@@ -76,7 +76,7 @@ exports.delete_account = function(req, res) {
     });
 };
 
-exports.add_course = function(req,res){
+exports.add_course_to_account = function(req,res){
     Course.findOneAndUpdate(
         {courseId: req.body['courseId']},
         { $addToSet: {enrolled: req.body['accountId']}}
@@ -99,7 +99,7 @@ exports.add_course = function(req,res){
     });
 };
 
-exports.delete_course = function(req,res){
+exports.delete_course_from_account = function(req,res){
     Course.findOneAndUpdate(
         {courseId: req.body['courseId']},
         { $pull: {enrolled: req.body['accountId']}}
