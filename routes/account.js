@@ -9,7 +9,7 @@ router.post('/create',accountController.create_new_account);
 
 router.get('/',accountController.read_a_account);
 
-router.delete('/delete', accountController.remove_account);
+router.post('/delete', accountController.remove_account);
 
 router.post('/update',accountController.update_a_account);
 

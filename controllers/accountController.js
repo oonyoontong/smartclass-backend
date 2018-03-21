@@ -56,24 +56,14 @@ exports.update_a_account = function(req, res) {
 };
 
 //TODO remove references
-exports.remove_account = function(req, res) {
-    Account.remove({
-        _id: req.body['accountId']
-    }, function(err, account) {
-        if (err)
-            res.send(err);
-        res.send("DONE");
-      /*  Course.deleteMany(
-            {
-                "enrolled": req.body['accountId']
-            }, function(err,course){
-                if (err)
-                    res.send(err);
-                    if (account){
-                        res.json(account);
-                    }
-            })*/
-    });
+exports.remove_account = function(req,res){
+  Account.remove(
+      {_id: req.body['accountId']},
+      function(err){
+          if (err)
+              res.send(err);
+          res.send("account deleted");
+      })
 };
 
 exports.add_course_to_account = function(req,res){

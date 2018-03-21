@@ -1,4 +1,5 @@
 //Account schema
+var course = require("./courseSchema");
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
@@ -18,5 +19,17 @@ var AccountSchema = new Schema({
     }]
 	});
 
+AccountSchema.pre("remove",function(){
+    console.log(this);
+   course.update(
+       {_id: {$in : this.enrolled}},
+       {$pull : {enrolled: this._id}},
+       {multi: true},
+       function(err){
+           if (err)
+               console.log(err);
+           console.log("removed course references to this account");
+       })
+});
 
 module.exports = mongoose.model('Account', AccountSchema);
