@@ -32,7 +32,7 @@ CourseSchema.pre("remove", function(){
                 console.log(err);
             else
                 console.log("removed account references to this course");
-        })
+        });
 
     this.model('Lecture').remove(
         {_id: {$in: this.lectures}},

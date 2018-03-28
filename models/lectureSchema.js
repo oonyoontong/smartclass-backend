@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 
 var LectureSchema = new Schema({
+    courseId: String,
     lectureName: String,
     description: String,
     dateCreated: Date,
@@ -20,15 +21,16 @@ var LectureSchema = new Schema({
 });
 
 LectureSchema.pre("remove", function(){
+    console.log("IS THIS EXECUTING");
     this.model('Course').update(
-        {_id: {$in: this.enrolled}},
-        {$pull: {enrolled: this._id}},
+        {_id: this.courseId},
+        {$pull: {lectures: this._id}},
         {multi: true},
         function(err){
             if (err)
                 console.log(err);
             else
-                console.log("removed account references to this course");
+                console.log("removed course references to this lecture");
         })
 });
 

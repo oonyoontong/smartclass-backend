@@ -32,24 +32,42 @@ exports.update_a_lecture = function(req, res) {
     Lecture.findOneAndUpdate({_id: req.body['lectureId']}, req.body, {new: true}, function(err, lecture) {
         if (err)
             res.send(err);
-        console.log(lecture);
         res.json(lecture);
     });
 };
 
-exports.read_a_lecture = function(req,res){
-    Lecture.findById(req.body['lectureId'], function(err,lecture){
+exports.get_all_lectures_from_course = function(req,res){
+    Course.findById(req.body['courseId'],"lectures")
+        .populate("lectures")
+        .exec(function(err,lectures){
+            if (err)
+                send(err);
+            res.json(lectures);
+        })
+};
+
+
+exports.get_all_lectures = function(req,res){
+    Lecture.find({},function(err,lectures){
         if (err)
             res.send(err);
-        res.json(lecture);
+        res.json(lectures);
     })
 };
 
-exports.read_lecture_array = function(req,res){
-    Lecture.find({_id: {$in:req.body['lectureIdArray']}}, function(err,lecture){
-        if(err)
-            res.send(err);
-        res.json(lecture)
-    })
-};
+exports.remove_lecture = function(req,res){
+    Lecture.findOne(
+        {_id: req.body['lectureId']},
+        function(err, lecture) {
+            if (err)
+                res.send(err);
 
+            if(lecture == null){
+                console.log("lecture is null");
+            } else {
+                lecture.remove();
+                res.send(lecture);
+            }
+        }
+    )
+};
