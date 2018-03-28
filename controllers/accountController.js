@@ -77,15 +77,20 @@ exports.remove_account = function(req,res){
 
 exports.add_course_to_account = function(req,res){
     Course.findOneAndUpdate(
-        {courseId: req.body['courseId']},
+        {_id: req.body['courseId']},
         { $addToSet: {enrolled: req.body['accountId']}}
     ).exec(function(err,result){
+        console.log(result);
         if (err)
             res.send(err);
+        if (!result){
+            res.send("No such course");
+            return;
+        }
         try {
         Account.findByIdAndUpdate(
             req.body['accountId'],
-            { $addToSet: {enrolled: result["_id"]}},
+            { $addToSet: {enrolled: req.body['courseId']}},
             {new:true}
         ).exec(function(err, account) {
             if (err)
@@ -100,15 +105,19 @@ exports.add_course_to_account = function(req,res){
 
 exports.delete_course_from_account = function(req,res){
     Course.findOneAndUpdate(
-        {courseId: req.body['courseId']},
+        {_id: req.body['courseId']},
         { $pull: {enrolled: req.body['accountId']}}
     ).exec(function(err,result){
         if (err)
             res.send(err);
+        if (!result){
+            res.send("No such course");
+            return;
+        }
         try {
             Account.findByIdAndUpdate(
                 req.body['accountId'],
-                { $pull: {enrolled: result["_id"]}},
+                { $pull: {enrolled: req.body['courseId']}},
                 {new:true}
             ).exec(function(err, account) {
                 if (err)

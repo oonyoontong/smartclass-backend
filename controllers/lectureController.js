@@ -2,9 +2,8 @@ var Lecture = require('../models/lectureSchema');
 var Course = require('../models/courseSchema');
 
 exports.create_new_lecture = function(req,res){
-
     Course.findOne(
-        {courseId: req.body['courseId']},
+        {_id: req.body['courseId']},
         function(err,course){
            if (err) {
                res.send(err);

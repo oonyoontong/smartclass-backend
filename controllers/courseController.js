@@ -15,7 +15,7 @@ exports.create_new_course = function(req,res){
 
 exports.remove_course = function(req, res) {
     Course.findOne(
-        {courseId: req.body['courseId']},
+        {_id: req.body['courseId']},
         function(err, course) {
             if (err)
                 res.send(err);
@@ -32,7 +32,7 @@ exports.remove_course = function(req, res) {
 
 
 exports.update_a_course = function(req, res) {
-    Course.findOneAndUpdate({courseId: req.body['courseId']}, req.body, {new: true}, function(err, course) {
+    Course.findOneAndUpdate({_id: req.body['courseId']}, req.body, {new: true}, function(err, course) {
         if (err)
             res.send(err);
         console.log(course);
@@ -41,7 +41,7 @@ exports.update_a_course = function(req, res) {
 };
 
 exports.read_a_course = function(req, res) {
-    Course.find({courseId: req.body['courseId']}, function(err, course) {
+    Course.find({_id: req.body['courseId']}, function(err, course) {
         if (err)
             res.send(err);
         res.json(course);
@@ -61,7 +61,7 @@ exports.find_course_name_like = function(req,res){
         courseName: { $regex: '.*' + req.body['courseName'] + '.*', $options: "i"}
     }, function(err,course){
         if (err)
-            res.send(err)
+            res.send(err);
         res.json(course);
     })
 };
