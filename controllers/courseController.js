@@ -1,4 +1,6 @@
 var Course = require('../models/courseSchema');
+var Lecture = require('../models/lectureSchema');
+
 
 exports.create_new_course = function(req,res){
     req.body["dateCreated"] = Date.now();
@@ -62,6 +64,4 @@ exports.find_course_name_like = function(req,res){
             res.send(err)
         res.json(course);
     })
-}
-
-
+};

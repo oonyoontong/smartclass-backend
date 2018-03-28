@@ -17,6 +17,19 @@ var LectureSchema = new Schema({
 
     //How to include ppt
     //quiz
-})
+});
+
+LectureSchema.pre("remove", function(){
+    this.model('Course').update(
+        {_id: {$in: this.enrolled}},
+        {$pull: {enrolled: this._id}},
+        {multi: true},
+        function(err){
+            if (err)
+                console.log(err);
+            else
+                console.log("removed account references to this course");
+        })
+});
 
 module.exports = mongoose.model('Lecture', LectureSchema);

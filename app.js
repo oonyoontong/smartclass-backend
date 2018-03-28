@@ -50,9 +50,11 @@ app.use(passport.session());
 
 var account = require('./routes/account');
 var course = require('./routes/course');
+var lecture = require('./routes/lecture');
 
 app.use('/account',account);
 app.use('/course',course);
+app.use('/lecture',lecture);
 
 
 //Connecting to MongoDB

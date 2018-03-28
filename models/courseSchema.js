@@ -1,6 +1,5 @@
 //Course schema
 var mongoose = require('mongoose');
-var account = require('./accountSchema');
 var Schema = mongoose.Schema;
 
 
@@ -34,6 +33,16 @@ CourseSchema.pre("remove", function(){
             else
                 console.log("removed account references to this course");
         })
+
+    this.model('Lecture').remove(
+        {_id: {$in: this.lectures}},
+        function(err){
+            if (err)
+                console.log(err);
+            else
+                console.log("removed all lectures");
+        }
+    )
 });
 
 module.exports = mongoose.model('Course', CourseSchema);
