@@ -70,4 +70,6 @@ exports.remove_lecture = function(req,res){
             }
         }
     )
+
+
 };

@@ -21,7 +21,7 @@ var LectureSchema = new Schema({
 });
 
 LectureSchema.pre("remove", function(){
-    console.log("IS THIS EXECUTING");
+    console.log("REMOVING A LECTURE!");
     this.model('Course').update(
         {_id: this.courseId},
         {$pull: {lectures: this._id}},

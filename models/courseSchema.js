@@ -34,13 +34,21 @@ CourseSchema.pre("remove", function(){
                 console.log("removed account references to this course");
         });
 
-    this.model('Lecture').remove(
+    this.model('Lecture').find(
         {_id: {$in: this.lectures}},
-        function(err){
-            if (err)
-                console.log(err);
-            else
-                console.log("removed all lectures");
+        function(err,lectures){
+            for (var i = 0;i < lectures.length;i++){
+                var lecture = lectures[i];
+                if (err)
+                    console.log(err);
+
+                if(lecture == null){
+                    console.log("lecture is null");
+                } else {
+                    lecture.remove();
+                    console.log(lecture);
+                }
+            }
         }
     )
 });

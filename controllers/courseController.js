@@ -22,9 +22,10 @@ exports.remove_course = function(req, res) {
 
             if(course == null){
                 console.log("course is null");
+                res.send(course);
             } else {
                 course.remove();
-            res.send(course);
+                res.send(course);
             }
         }
     )
