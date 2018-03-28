@@ -1,10 +1,7 @@
-var mongoose = require("mongoose");
 var Course = require('../models/courseSchema');
-var Account = require('../models/accountSchema');
 
 exports.create_new_course = function(req,res){
-    req.body["Date"] = Date.now();
-
+    req.body["dateCreated"] = Date.now();
     var new_course = new Course(req.body);
     new_course.save(function(err, course) {
         if (err)
@@ -13,7 +10,7 @@ exports.create_new_course = function(req,res){
     });
 };
 
-//TODO remove all references/children
+
 exports.remove_course = function(req, res) {
     Course.findOne(
         {courseId: req.body['courseId']},

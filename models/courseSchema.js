@@ -1,5 +1,4 @@
 //Course schema
-
 var mongoose = require('mongoose');
 var account = require('./accountSchema');
 var Schema = mongoose.Schema;
