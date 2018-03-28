@@ -4,13 +4,11 @@ var Schema = mongoose.Schema;
 
 
 var liveSchema = new Schema({
-
-    message: String,
+    question: String,
+    answer: String,
     dateCreated: Date,
-    upvote: [Schema.Types.ObjectId]
-
-
-})
+    upvote: Number
+});
 
 
 module.exports = mongoose.model('Live', liveSchema);

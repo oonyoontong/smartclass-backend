@@ -1,18 +1,57 @@
-ACCOUNT
-    //CREATE
-    //AUTH
-    //UPDATE
-    //DELETE
-    //ADD COURSE
-    //DELETE COURSE
+WEBSOCKET
 
-COURSE
-    //FIND BY NAME
-    //FIND BY ID
-    //CREATE
-    //UPDATE
-    //DELETE
-    ADD LECTURE
-    REMOVE LECTURE
+
+
+server:
+    incoming:
+        connection
+            room
+        createmessage
+        deletemessage
+
+    outgoing:
+        connect
+        newmessage
+        deletemessage
+
+io.sockets.on('connection', function(socket) {
+    // once a client has connected, we expect to get a ping from them saying what room they want to join
+    socket.on('room', function(room) {
+        socket.join(room);
+    });
+});
+
+io.sockets.on('createmessage', (room,message) => {
+    //send message to liveSchema
+    //emit to all in room
+}
+
+io.socket.on('upvote', (room, messageId){
+    //upvote++ for messageId in liveSchema
+    //emit to all in room
+}
+
+
+
+
+client:
+    incoming:
+        connect
+        newmessage
+        deletemessage
+
+
+    outgoing:
+        room
+        createmessage
+        deletemessage
+
+var socket = io.connect();
+socket.on('connect', function() {
+   // Connected, let's sign-up for to receive messages for this room
+   socket.emit('room', room);
+});
+
+
 
 

@@ -21,6 +21,8 @@ app.set('port', port);
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
+
+require('../socket/liveSocket').start(io);
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -31,32 +33,19 @@ server.listen(port,function(){
 server.on('error', onError);
 server.on('listening', onListening);
 
+/*
 var onlineUsers = {};
 var sentMessages = [];
 
-io.on('connection', function(socket){
-    console.log('Socket connected with ID of ' + socket.id);
-    socket.on('user logged in', function(username) {
-        console.log('%s has joined the chat!', username);
 
-        onlineUsers[socket.id] = username;
 
-        io.emit('user joined', {
-            socketId: socket.id,
-            username: username,
-            timestamp: new Date,
-            type: 'alert',
-            message: username + ' has joined the chat!'
-        });
-    });
-
-    /**
+    /!**
      * This will get fired whenever a user submits a message to the chat. The
      * server will create a message object to store all of the various
      * metadata and store it in $sentMessages. It will then emit a
      * message to the client to tell it to output the message
      * in the chat to all users.
-     */
+     *!/
     socket.on('send message', function(message) {
         var senderUsername = onlineUsers[socket.id];
 
@@ -75,11 +64,11 @@ io.on('connection', function(socket){
         io.emit('message received', messageObject);
     });
 
-    /**
+    /!**
      * Listens for when an admin clicks the "kick" link on the online users list.
      * The server will try to find the socket associated with the given username
      * and disconnect it if it exists.
-     */
+     *!/
     socket.on('kick user', function(username) {
         var socketId = Object.keys(onlineUsers).filter(function(key) {
             return onlineUsers[key] == username;
@@ -92,11 +81,11 @@ io.on('connection', function(socket){
         console.log('%s has been kicked from the chat.', username);
     });
 
-    /**
+    /!**
      * Gets fired when a user leaves the page. It will remove their session
      * from $onlineUsers and broadcast a message to the client to alert
      * everyone in the chat that the user has disconnected.
-     */
+     *!/
     socket.on('disconnect', function() {
         var username = onlineUsers[socket.id];
 
@@ -112,7 +101,7 @@ io.on('connection', function(socket){
             message: username + ' has disconnected from the chat!'
         });
     });
-});
+});*/
 
     /**
      * Normalize a port into a number, string, or false.
