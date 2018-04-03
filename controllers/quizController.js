@@ -47,3 +47,17 @@ exports.remove_quiz = function(req,res){
         }
     )
 };
+
+exports.update_quiz = function(req,res){
+    Quiz.Update(
+        {_id: req.body['quizId']},
+        req.body,
+        {new: true},
+        function(err,quiz){
+            if (err)
+                res.send(err);
+            res.json(quiz);
+        }
+    )
+};
+

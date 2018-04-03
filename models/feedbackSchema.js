@@ -6,6 +6,6 @@ var FeedbackSchema = new mongoose.Schema({
     feedback: String,
     slideNumber: Number,
     lecture: {type:Schema.Types.ObjectId, ref: 'Lecture'}
-	})
+	});
 
 module.exports = mongoose.model('Feedback', FeedbackSchema);

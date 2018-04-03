@@ -17,3 +17,16 @@ exports.remove_question = function(req,res){
         }
     )
 };
+
+exports.update_question = function(req,res){
+    Question.update(
+        { _id: req.body['questionId']},
+        req.body,
+        {new : true},
+        function(err,question){
+            if (err)
+                res.send(err);
+            res.json(question);
+        }
+    )
+};

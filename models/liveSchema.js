@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 
 
 var liveSchema = new Schema({
+    lectureId:String,
     question: String,
     answer: String,
     dateCreated: Date,
