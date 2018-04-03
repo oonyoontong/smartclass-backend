@@ -27,6 +27,5 @@ QuestionSchema.pre("remove", function(){
             else
                 console.log("removed quiz references to this question");
         });
-    
 });
 module.exports = mongoose.model('Question', QuestionSchema);

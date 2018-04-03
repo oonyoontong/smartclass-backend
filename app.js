@@ -52,11 +52,17 @@ var account = require('./routes/account');
 var course = require('./routes/course');
 var lecture = require('./routes/lecture');
 var quiz = require('./routes/quiz');
+var question = require('./routes/question');
+var live = require('./routes/live');
+var feedback = require('./routes/feedback');
 
 app.use('/account',account);
 app.use('/course',course);
 app.use('/lecture',lecture);
 app.use('/quiz',quiz);
+app.use('/question',question);
+app.use('/live',live);
+app.use('/feedback',feedback);
 
 //Connecting to MongoDB
 var mongoDB =  'mongodb://username:password@ds012578.mlab.com:12578/smartclass-db';

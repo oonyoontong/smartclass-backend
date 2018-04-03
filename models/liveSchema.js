@@ -11,5 +11,19 @@ var liveSchema = new Schema({
     upvote: Number
 });
 
+liveSchema.pre("remove", function(){
+    this.model('Lecture').update(
+        {_id: this.lectureId},
+        {$pull: {live: this._id}},
+        {multi: true},
+        function(err){
+            if (err)
+                console.log(err);
+            else
+                console.log("removed lecture references to this live question");
+        }
+    );
+});
+
 
 module.exports = mongoose.model('Live', liveSchema);

@@ -20,15 +20,30 @@ var Live = require('../models/liveSchema');
 
 
 exports.create_live = function(liveJson){
-
-    liveJson["dateCreated"] = Date.now();
-
-    var live = new Live(liveJson);
-    live.save(function(err){
-        if (err)
-            console.log(err);
-    })
-
+    Lecture.findOne(
+        {_id: req.body['lectureId']},
+        function(err,lecture){
+            if (err) {
+                res.send(err);
+                return;
+            }
+            if (!lecture){
+                res.send("FAILED");
+                return;
+            }
+            req.body["dateCreated"] = Date.now();
+            var new_live = new Live(req.body);
+            new_live.save(function(err,live) {
+                if (err)
+                    res.send(err);
+                lecture.live.push(live);
+                lecture.save(function(err){
+                    if (err)
+                        res.send(err);
+                    res.send(live)
+                });
+            });
+        });
 };
 
 exports.get_all_by_lecture = function(req,res){
@@ -51,6 +66,22 @@ exports.upvote_live = function(req,res){
                 res.send(err);
             res.json(live);
         }
+    )
+};
 
+exports.remove_live = function(req,res){
+    Live.findOne(
+        {_id: req.body['liveId']},
+        function(err, live) {
+            if (err)
+                res.send(err);
+
+            if(live == null){
+                console.log("live is null");
+            } else {
+                live.remove();
+                res.send(live);
+            }
+        }
     )
 };

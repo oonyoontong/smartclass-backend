@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var QuizSchema = new Schema({
+    lectureId: String,
     questionId: String,
     quizName: String,
     description: String,
@@ -11,6 +12,19 @@ var QuizSchema = new Schema({
 
 
 QuizSchema.pre("remove", function(){
+    this.model('Lecture').update(
+        {_id: this.lectureId},
+        {$pull: {quiz: this._id}},
+        {multi: true},
+        function(err){
+            if (err)
+                console.log(err);
+            else
+                console.log("removed lecture references to this quiz");
+        }
+    );
+    
+    
     this.model('Question').find(
         {_id: {$in: this.questions}},
         function(err,questions){
@@ -28,6 +42,8 @@ QuizSchema.pre("remove", function(){
             }
         }
     )
+    
+    
 });
 
 module.exports = mongoose.model('Quiz', QuizSchema);
