@@ -51,11 +51,12 @@ app.use(passport.session());
 var account = require('./routes/account');
 var course = require('./routes/course');
 var lecture = require('./routes/lecture');
+var quiz = require('./routes/quiz');
 
 app.use('/account',account);
 app.use('/course',course);
 app.use('/lecture',lecture);
-
+app.use('/quiz',quiz);
 
 //Connecting to MongoDB
 var mongoDB =  'mongodb://username:password@ds012578.mlab.com:12578/smartclass-db';
