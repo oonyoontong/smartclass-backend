@@ -24,23 +24,23 @@ exports.create_live = function(liveJson){
         {_id: req.body['lectureId']},
         function(err,lecture){
             if (err) {
-                res.send(err);
+                console.log(err);
                 return;
             }
             if (!lecture){
-                res.send("FAILED");
+                console.log("FAILED");
                 return;
             }
             req.body["dateCreated"] = Date.now();
             var new_live = new Live(req.body);
             new_live.save(function(err,live) {
                 if (err)
-                    res.send(err);
+                    console.log(err);
                 lecture.live.push(live);
                 lecture.save(function(err){
                     if (err)
-                        res.send(err);
-                    res.send(live)
+                        console.log(err);
+                    console.log(live)
                 });
             });
         });
