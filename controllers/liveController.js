@@ -8,7 +8,7 @@ MONGOOSE - CREATE MESSAGE > MESSAGE
 
 SOCKET - EMIT MESSAGE > CLIENTS*/
 
-
+var Lecture = require('../models/lectureSchema');
 var Live = require('../models/liveSchema');
 
 
@@ -82,6 +82,19 @@ exports.remove_live = function(req,res){
                 live.remove();
                 res.send(live);
             }
+        }
+    )
+};
+
+exports.answer_live = function(req,res){
+    Live.update(
+        { _id: req.body['questionId']},
+        {answer : req.body['answer']},
+        {new : true},
+        function(err,live){
+            if (err)
+                res.send(err);
+            res.json(live);
         }
     )
 };

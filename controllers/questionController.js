@@ -19,7 +19,7 @@ exports.remove_question = function(req,res){
 };
 
 exports.update_question = function(req,res){
-    Question.update(
+    Question.findOneAndUpdate(
         { _id: req.body['questionId']},
         req.body,
         {new : true},

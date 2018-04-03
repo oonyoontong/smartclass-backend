@@ -1,6 +1,4 @@
 var Course = require('../models/courseSchema');
-var Lecture = require('../models/lectureSchema');
-
 
 exports.create_new_course = function(req,res){
     req.body["dateCreated"] = Date.now();

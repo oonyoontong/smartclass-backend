@@ -1,14 +1,14 @@
-var express = require('express');
-var path = require('path');
+const express = require('express');
+const path = require('path');
 
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
-var app = express();
-var session = require('express-session');
-var passport = require('passport');
+const app = express();
+const session = require('express-session');
+const passport = require('passport');
 
 
 // view engine setup
@@ -48,13 +48,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-var account = require('./routes/account');
-var course = require('./routes/course');
-var lecture = require('./routes/lecture');
-var quiz = require('./routes/quiz');
-var question = require('./routes/question');
-var live = require('./routes/live');
-var feedback = require('./routes/feedback');
+const account = require('./routes/account');
+const course = require('./routes/course');
+const lecture = require('./routes/lecture');
+const quiz = require('./routes/quiz');
+const question = require('./routes/question');
+const live = require('./routes/live');
+const feedback = require('./routes/feedback');
 
 app.use('/account',account);
 app.use('/course',course);
@@ -65,17 +65,17 @@ app.use('/live',live);
 app.use('/feedback',feedback);
 
 //Connecting to MongoDB
-var mongoDB =  'mongodb://username:password@ds012578.mlab.com:12578/smartclass-db';
+const mongoDB =  'mongodb://username:password@ds012578.mlab.com:12578/smartclass-db';
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console,'MongoDB connection error'));
 
 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
