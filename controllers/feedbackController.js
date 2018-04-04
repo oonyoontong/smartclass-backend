@@ -48,6 +48,7 @@ exports.remove_feedback = function(req,res){
 
             if(feedback == null){
                 console.log("feedback is null");
+                res.send(feedback);
             } else {
                 feedback.remove();
                 res.send(feedback);

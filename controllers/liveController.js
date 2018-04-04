@@ -78,6 +78,7 @@ exports.remove_live = function(req,res){
 
             if(live == null){
                 console.log("live is null");
+                res.send(live);
             } else {
                 live.remove();
                 res.send(live);
