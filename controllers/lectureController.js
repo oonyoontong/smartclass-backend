@@ -64,6 +64,7 @@ exports.remove_lecture = function(req,res){
 
             if(lecture == null){
                 console.log("lecture is null");
+                res.send(lecture);
             } else {
                 lecture.remove();
                 res.send(lecture);

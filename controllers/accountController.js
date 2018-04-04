@@ -55,8 +55,6 @@ exports.update_a_account = function(req, res) {
     });
 };
 
-//TODO remove references
-//remove courses references
 exports.remove_account = function(req,res){
   Account.findById(
       req.body['accountId'],
