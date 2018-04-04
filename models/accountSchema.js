@@ -10,7 +10,7 @@ var AccountSchema = new Schema({
     email: String,
     //0 for admin, 1 for instructor, 2 for admin
     privilege: {type: Number, required: true},
-    class: String,
+    cohort: String,
     enrolled: [{
         type: Schema.Types.ObjectId,
         ref: 'Course'

@@ -2,8 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var QuizSchema = new Schema({
-    lectureId: String,
-    questionId: String,
+    lectureId: {type: String, required: true},
     quizName: String,
     description: String,
     dateCreated: Date,

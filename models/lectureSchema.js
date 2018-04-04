@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 
 var LectureSchema = new Schema({
-    courseId: String,
+    courseId: {type: String, required: true},
     lectureName: String,
     description: String,
     dateCreated: Date,
