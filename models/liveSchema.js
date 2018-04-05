@@ -8,7 +8,11 @@ var liveSchema = new Schema({
     question: String,
     answer: String,
     dateCreated: Date,
-    upvote: Number
+    upvotes: Number,
+    upvoted: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Account'
+    }]
 });
 
 liveSchema.pre("remove", function(){
