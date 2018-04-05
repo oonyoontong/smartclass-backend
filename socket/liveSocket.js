@@ -20,7 +20,6 @@ module.exports = {
 
             socket.on('send message', function(liveQ){
                 console.log("message received: " + liveQ);
-
                 liveController.create_live(liveQ).then((result) => {
                     console.log("result of promise!")
                     console.log(result)
@@ -28,9 +27,12 @@ module.exports = {
                 })
             });
 
-            socket.on('upvote', function(room, liveQId){
-                //increment question upvote on mongoDB
-                socket.to(room).emit(liveQId);
+            socket.on('upvote', function(liveQ){
+                liveController.upvote_live(liveQ).then((result) => {
+                    console.log("result of promise!")
+                    console.log(result)
+                    io.to(socket.rooms[Object.keys(socket.rooms)[1]]).emit("upvote received");
+                })
             });
 
             socket.on('answer', function(room, liveQId, answer){

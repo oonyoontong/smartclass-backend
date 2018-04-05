@@ -65,17 +65,23 @@ exports.get_all_by_lecture = function(req,res){
     )
 };
 
-exports.upvote_live = function(req,res){
-    Live.findOneAndUpdate(
-        { _id : req.body["liveId"]},
-        {$inc:{upvotes: 1}},
-        function(err,live){
-            if (err)
-                res.send(err);
-            res.json(live);
-        }
-    )
+exports.upvote_live = function(liveJson){
+    return new Promise(function(resolve, reject){
+        Live.findOneAndUpdate(
+            { _id : liveJson["_id"]},
+            {$inc:{upvotes: 1}},
+            function(err,live){
+                if (err)
+                    reject(err)
+                console.log("found one and updated")
+                console.log(live);
+                resolve(live);
+            }
+        )
+    })
+
 };
+
 
 exports.remove_live = function(req,res){
     Live.findOne(
