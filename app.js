@@ -1,5 +1,8 @@
 const express = require('express');
 const path = require('path');
+const fileUpload = require('express-fileupload');
+
+
 
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -10,6 +13,7 @@ const app = express();
 const session = require('express-session');
 const passport = require('passport');
 
+app.use(fileUpload());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -63,6 +67,9 @@ app.use('/quiz',quiz);
 app.use('/question',question);
 app.use('/live',live);
 app.use('/feedback',feedback);
+
+var fs = require("fs");
+
 
 //Connecting to MongoDB
 const mongoDB =  'mongodb://username:password@ds012578.mlab.com:12578/smartclass-db';

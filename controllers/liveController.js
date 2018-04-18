@@ -1,12 +1,3 @@
-/*RESTFUL - GET ALL MESSAGE > CLIENT
-
-SORT BY UPVOTE IN VUE
-
-SOCKET - CREATE MESSAGE > SERVER
-
-MONGOOSE - CREATE MESSAGE > MESSAGE
-
-SOCKET - EMIT MESSAGE > CLIENTS*/
 
 var Lecture = require('../models/lectureSchema');
 var Live = require('../models/liveSchema');
@@ -69,7 +60,7 @@ exports.upvote_live = function(liveJson){
     return new Promise(function(resolve, reject){
         Live.findOneAndUpdate(
             { _id : liveJson["_id"]},
-            {$inc:{upvotes: 1}},
+            {$inc:{upvotes: 1}, $push:{upvoted: liveJson['accountId']}},
             function(err,live){
                 if (err)
                     reject(err)

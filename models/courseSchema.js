@@ -20,7 +20,7 @@ var CourseSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Account'
     }]
-	});
+});
 
 CourseSchema.pre("remove", function(){
     this.model('Account').update(
