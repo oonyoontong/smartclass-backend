@@ -48,10 +48,12 @@ exports.get_all_lectures_from_course = function(req,res){
 
 
 exports.get_all_lectures = function(req,res){
-    Lecture.find({},function(err,lectures){
-        if (err)
-            res.send(err);
-        res.json(lectures);
+    Lecture.find({})
+        .populate("quiz")
+        .exec(function(err,lectures){
+            if (err)
+                res.send(err);
+            res.json(lectures);
     })
 };
 

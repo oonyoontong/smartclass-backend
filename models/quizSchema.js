@@ -45,4 +45,14 @@ QuizSchema.pre("remove", function(){
     
 });
 
+QuizSchema.
+pre('findOne', autoPopulateQn).
+pre('find', autoPopulateQn);
+
+
+function autoPopulateQn(next) {
+    this.populate('questions');
+    next();
+}
+
 module.exports = mongoose.model('Quiz', QuizSchema);
