@@ -50,6 +50,16 @@ exports.get_all_quiz = function(req,res){
         })
 };
 
+exports.get_a_quiz = function(req,res){
+    Quiz.findById(req.body.quizId)
+        .populate("questions")
+        .exec(function(err,quiz){
+            if (err)
+                res.send(err);
+            res.json(quiz);
+        })
+};
+
 exports.remove_quiz = function(req,res){
     Quiz.findOne(
         {_id: req.body['quizId']},

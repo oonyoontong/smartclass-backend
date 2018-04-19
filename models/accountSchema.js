@@ -8,7 +8,7 @@ var AccountSchema = new Schema({
     passwordSalt: String,
     passwordHash: String,
     email: String,
-    //0 for admin, 1 for instructor, 2 for admin
+    //0 for admin, 1 for instructor, 2 for student
     privilege: {type: Number, required: true},
     cohort: String,
     enrolled: [{
