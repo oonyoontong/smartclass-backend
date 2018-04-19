@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
-const fileUpload = require('express-fileupload');
-
+const multer = require('multer');
+const upload  = multer({dest: 'uploads/'});
 
 
 const logger = require('morgan');
@@ -13,11 +13,7 @@ const app = express();
 const session = require('express-session');
 const passport = require('passport');
 
-app.use(fileUpload());
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -49,6 +45,8 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -68,8 +66,6 @@ app.use('/question',question);
 app.use('/live',live);
 app.use('/feedback',feedback);
 
-var fs = require("fs");
-
 
 //Connecting to MongoDB
 const mongoDB =  'mongodb://username:password@ds012578.mlab.com:12578/smartclass-db';
@@ -78,6 +74,12 @@ mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 db.on('error', console.error.bind(console,'MongoDB connection error'));
 
+app.post('/upload',upload.single('example'),function (req, res) {
+    // req.file is the `avatar` file
+    // req.body will hold the text fields, if there were any
+    console.log(req.file);
+    res.send("file received");
+});
 
 
 // catch 404 and forward to error handler

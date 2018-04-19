@@ -40,7 +40,9 @@ exports.get_enrolled_courses_from_account = function(req,res){
 };
 
 exports.update_a_course = function(req, res) {
-    Course.findOneAndUpdate({_id: req.body['courseId']}, req.body, {new: true}, function(err, course) {
+    var _id = req.body['courseId'];
+    delete req.body.courseId;
+    Course.findOneAndUpdate({_id: _id}, req.body, {new: true}, function(err, course) {
         if (err)
             res.send(err);
         console.log(course);
